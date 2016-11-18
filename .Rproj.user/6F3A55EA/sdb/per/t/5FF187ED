@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "#' R Code for Analysis of Variance Example\n#' \n#' The following exercise comes from \n#' (http://r-exercises.com/), which is a site created \n#' by Research for Decisions, a Dutch research/consulting \n#' firm. They provide many exercises for learning R and \n#' practicing R coding skills. They also provide a large \n#' list of courses available for learning R - both free \n#' and paid - with detailed summaries of each option \n#' at (http://r-exercises.com/r-courses/).\n\n#' Read in dataset - CSV comma delimited data format\n\ncancer.survival <- read.csv(\"cancer-survival.csv\", \n                            header = TRUE)\n\n#' Look at the data - both in the Global Environment\n#' and can also use the head() function to see first 5 rows\n\nhead(cancer.survival)\n\n#' We can make this into a formatted table\n#' using the knitr package and the kable() function\n#' \n#' NOTE: If knitr is not installed yet, install it first.\n#' Once the package is installed it must be loaded\n#' using the library() function.\n\nlibrary(knitr)\nknitr::kable(head(cancer.survival))\n\n#' Other useful functions of looking at the data\n#' and specifically the \"variables\" or columns in the data\n#' str() is the structure function\n#' \n\nstr(cancer.survival)\n\n\n\nnames(cancer.survival)\n\n\n\nmean(cancer.survival$Survival)\n\ncancer.survival[5,1]\n\nsummary(cancer.survival[,1])\n\nsummary(cancer.survival[,2])\n\nknitr::kable(summary(cancer.survival),\n             caption = \"Table of Summary Statistics for 2 Variables in Dataset\")\n\n# install.packages(\"dplyr\")\nlibrary(dplyr)\ncancer.survival %>%\n  summary()\n\ncancer.survival %>%\n  summary() %>%\n  knitr::kable(caption = \"Table of Summary Statistics for 2 Variables in Dataset\")\n\n\n## Let's try some inline code\n\nmean(cancer.survival$Survival)\n\nmnsurv <- mean(cancer.survival$Survival)\nsdsurv <- sd(cancer.survival$Survival)\n\nround(mnsurv, digits=2)\n\nhist(cancer.survival$Survival,\nmain=\"Histogram of Survival Times\")\n\ncancer.survival$Survival %>%\nhist(main=\"Histogram of Survival Times\")\n\n# install.packages(\"ggplot2\")\nlibrary(ggplot2)\nggplot(cancer.survival,\naes(x = Organ,y=Survival, color = Organ)) +\ngeom_boxplot() + \nstat_summary(fun.y=mean, \ngeom=\"point\", \nshape=23, \nsize=4) + \nggtitle(\"Survival time of patients affected by different cancers\")\n\n#describe the stats by group\nlibrary(psych)\ndescribeBy(cancer.survival$Survival,cancer.survival$Organ)\n\ndb <- describeBy(cancer.survival$Survival,cancer.survival$Organ)\n\nwith(cancer.survival,\n     tapply(Survival,Organ,shapiro.test))\n\n#Check for equality of variance\nlibrary(car)\nleveneTest(Survival~Organ, data = cancer.survival)\n\n\n#Apply a log transformation to survival time and check for normality and equality of variance.\ncancer.survival$log.survival = log(cancer.survival$Survival)\nwith(cancer.survival,tapply(log.survival,Organ,shapiro.test))\n\nleveneTest(log.survival~Organ, data = cancer.survival)\n\n#Perform one way anova\naov1 = aov(log.survival~Organ,cancer.survival)\nsummary(aov1)\n\nknitr::kable(summary(aov1))\n\n#use a kruskal-wallis test\nkruskal.test(log.survival~Organ,cancer.survival)\n\n# see full exercises at\n# http://r-exercises.com/2016/09/30/one-way-analysis-of-variance-solutions/\n\n",
+    "created" : 1476898674856.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3394566214",
+    "id" : "5FF187ED",
+    "lastKnownWriteTime" : 1479439623,
+    "last_content_update" : 1479439623570,
+    "path" : "C:/MyGithub/Fall2016RWorkshops/aov2.R",
+    "project_path" : "aov2.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
